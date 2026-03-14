@@ -2,11 +2,18 @@ import express from "express"
 import { makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion } from "@whiskeysockets/baileys"
 import pino from "pino"
 import 'dotenv/config'
+import path from "path"
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
-app.use(express.static("views")) // serve static HTML page
+// Serve HTML files
+app.use(express.static("views"))
+
+// Ensure homepage loads
+app.get("/", (req, res) => {
+    res.sendFile(path.resolve("views/index.html"))
+})
 
 // WhatsApp connection
 let sock
@@ -19,7 +26,7 @@ async function startBot() {
         version,
         logger: pino({ level: "silent" }),
         auth: state,
-        printQRInTerminal: false // we use pairing code instead
+        printQRInTerminal: false
     })
 
     sock.ev.on("creds.update", saveCreds)
@@ -27,15 +34,21 @@ async function startBot() {
 
 startBot()
 
-// Endpoint to generate pair code
+// Generate pairing code
 app.get("/pair", async (req, res) => {
-    if (!sock) return res.json({ code: "Bot not ready" })
+
+    const number = req.query.number || process.env.OWNER_NUMBER
+
+    if (!sock) {
+        return res.json({ code: "Bot not ready" })
+    }
+
     try {
-        const code = await sock.requestPairingCode(process.env.OWNER_NUMBER)
+        const code = await sock.requestPairingCode(number)
         res.json({ code })
     } catch (e) {
-        res.json({ code: "Error generating code" })
         console.error(e)
+        res.json({ code: "Error generating code" })
     }
 })
 
