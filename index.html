@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ᴀᴋᴀᴢᴀ❄️ ᴩᴀɪʀ</title>
+
+<style>
+/* Body with wallpaper (full visibility) */
+body {
+    background: url('https://files.catbox.moe/qzm8n5.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial;
+    text-align: center;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+/* Main heading */
+h1{
+    color: #00ffcc;
+    margin-top: 30px;
+    text-shadow: 0 0 10px #00ffc3;
+}
+
+/* Container box with reduced opacity (glass effect) */
+.box{
+    width: 300px;
+    margin: auto;
+    margin-top: 40px;
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(7, 26, 47, 0.7); /* 0.7 = 70% opacity */
+    box-shadow: 0 0 20px rgba(0,255,200,0.3);
+    backdrop-filter: blur(10px); /* optional: nice glass blur */
+}
+
+/* Small instructions inside box */
+.box h3{
+    color: #7f8fa6;
+    font-size: 14px;
+}
+
+/* Input field */
+input{
+    width:90%;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid #00ffc3;
+    background: rgba(2,18,31,0.6); /* slightly transparent input too */
+    color:white;
+    font-size:16px;
+    text-align:center;
+}
+
+/* Output box */
+#output{
+    margin-top:20px;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid #00ffc3;
+    background: rgba(2,18,31,0.6);
+    color:#00ffc3;
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* Generate button */
+button{
+    margin-top:20px;
+    width:90%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    color:white;
+    background: linear-gradient(90deg,#00ffc3,#3a86ff);
+    cursor:pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover{
+    box-shadow: 0 0 20px #00ffc3, 0 0 40px #3a86ff;
+}
+
+/* Copyright text */
+#copyright{
+    margin-top: 40px;
+    font-size: 12px;
+    color: #7f8fa6;
+}
+</style>
+
+<script>
+async function botPair(){
+    const number = document.querySelector("input").value.trim();
+    if(!number){
+        document.getElementById("output").innerHTML = "❌ Please enter a number!";
+        return;
+    }
+
+    document.getElementById("output").innerHTML = "Requesting AKAZA❄️ code...";
+
+    try{
+        const res = await fetch("/pair");
+        const data = await res.json();
+        document.getElementById("output").innerHTML = "Your Pair Code: " + data.code;
+    } catch(err){
+        document.getElementById("output").innerHTML = "❌ Error generating code";
+        console.error(err);
+    }
+}
+</script>
+
+</head>
+
+<body>
+
+<h1>ᴀᴋᴀᴢᴀ❄️ ᴩᴀɪʀ</h1>
+<p>⚡ʀᴇqᴜᴇꜱᴛ ᴀᴋᴀᴢᴀ️ ᴄᴏᴅᴇ</p>
+
+<div class="box">
+    <h3>enтer nυмвer wιтн coυnтry code !</h3>
+    <input type="text" placeholder="e.g 2567XXXXXXX">
+    <button onclick="botPair()">🎲ɢᴇɴᴇʀᴀᴛᴇ ᴄᴏᴅᴇ</button>
+    <div id="output"></div>
+</div>
+
+<div id="copyright">
+    &copy; 2026 Dante Dev
+</div>
+
+</body>
+  </html>
