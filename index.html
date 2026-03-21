@@ -2,10 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ᴀᴋᴀᴢᴀ❄️ ᴩᴀɪʀ</title>
 
 <style>
-/* Body with wallpaper (full visibility) */
+/* Body with wallpaper */
 body {
     background: url('https://files.catbox.moe/qzm8n5.jpg') no-repeat center center fixed;
     background-size: cover;
@@ -14,103 +15,186 @@ body {
     color: white;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
 }
 
 /* Main heading */
-h1{
+h1 {
     color: #00ffcc;
     margin-top: 30px;
     text-shadow: 0 0 10px #00ffc3;
 }
 
-/* Container box with reduced opacity (glass effect) */
-.box{
+/* Subtext */
+p {
+    color: #ccc;
+    margin-top: -10px;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+/* Container box with glass effect */
+.box {
     width: 300px;
     margin: auto;
-    margin-top: 40px;
+    margin-top: 30px;
     padding: 25px;
     border-radius: 20px;
-    background: rgba(7, 26, 47, 0.7); /* 0.7 = 70% opacity */
+    background: rgba(7, 26, 47, 0.7);
     box-shadow: 0 0 20px rgba(0,255,200,0.3);
-    backdrop-filter: blur(10px); /* optional: nice glass blur */
+    backdrop-filter: blur(10px);
 }
 
 /* Small instructions inside box */
-.box h3{
+.box h3 {
     color: #7f8fa6;
     font-size: 14px;
+    margin-bottom: 15px;
 }
 
 /* Input field */
-input{
-    width:90%;
-    padding:15px;
-    border-radius:12px;
-    border:1px solid #00ffc3;
-    background: rgba(2,18,31,0.6); /* slightly transparent input too */
-    color:white;
-    font-size:16px;
-    text-align:center;
+input {
+    width: 90%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #00ffc3;
+    background: rgba(2, 18, 31, 0.6);
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+    transition: box-shadow 0.3s ease;
 }
 
-/* Output box */
-#output{
-    margin-top:20px;
-    padding:15px;
-    border-radius:12px;
-    border:1px solid #00ffc3;
-    background: rgba(2,18,31,0.6);
-    color:#00ffc3;
-    font-size:18px;
-    font-weight:bold;
+input:focus {
+    box-shadow: 0 0 10px #00ffc3;
+}
+
+input::placeholder {
+    color: #556;
 }
 
 /* Generate button */
-button{
-    margin-top:20px;
-    width:90%;
-    padding:15px;
-    border:none;
-    border-radius:12px;
-    font-size:16px;
-    color:white;
-    background: linear-gradient(90deg,#00ffc3,#3a86ff);
-    cursor:pointer;
+button {
+    margin-top: 20px;
+    width: 90%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    color: white;
+    background: linear-gradient(90deg, #00ffc3, #3a86ff);
+    cursor: pointer;
     transition: all 0.3s ease;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
-button:hover{
+button:hover:not(:disabled) {
     box-shadow: 0 0 20px #00ffc3, 0 0 40px #3a86ff;
+    transform: translateY(-1px);
 }
 
-/* Copyright text */
-#copyright{
-    margin-top: 40px;
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Output box */
+#output {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #00ffc3;
+    background: rgba(2, 18, 31, 0.6);
+    color: #00ffc3;
+    font-size: 18px;
+    font-weight: bold;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    word-break: break-word;
+}
+
+#output.error {
+    color: #ff4d4d;
+    border-color: #ff4d4d;
+}
+
+#output.success {
+    color: #00ffc3;
+    border-color: #00ffc3;
+}
+
+/* Copy button inside output */
+.copy-btn {
+    margin-top: 0;
+    width: auto;
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #00ffc3, #3a86ff);
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    box-shadow: 0 0 10px #00ffc3;
+    transform: none;
+}
+
+/* Loader spinner */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0,255,195,0.3);
+    border-top-color: #00ffc3;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Steps section */
+.steps {
+    margin-top: 20px;
+    text-align: left;
+    border-top: 1px solid rgba(0,255,195,0.2);
+    padding-top: 15px;
+}
+
+.steps p {
     font-size: 12px;
     color: #7f8fa6;
+    margin: 6px 0;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+.steps p span {
+    color: #00ffc3;
+    font-weight: bold;
+}
+
+/* Footer */
+.footer {
+    margin-top: 30px;
+    padding-bottom: 30px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
 }
 </style>
-
-<script>
-async function botPair(){
-    const number = document.querySelector("input").value.trim();
-    if(!number){
-        document.getElementById("output").innerHTML = "❌ Please enter a number!";
-        return;
-    }
-
-    document.getElementById("output").innerHTML = "Requesting AKAZA❄️ code...";
-
-    try{
-        const res = await fetch("/pair");
-        const data = await res.json();
-        document.getElementById("output").innerHTML = "Your Pair Code: " + data.code;
-    } catch(err){
-        document.getElementById("output").innerHTML = "❌ Error generating code";
-        console.error(err);
-    }
-}
-</script>
 
 </head>
 
@@ -121,14 +205,99 @@ async function botPair(){
 
 <div class="box">
     <h3>enтer nυмвer wιтн coυnтry code !</h3>
-    <input type="text" placeholder="e.g 2567XXXXXXX">
-    <button onclick="botPair()">🎲ɢᴇɴᴇʀᴀᴛᴇ ᴄᴏᴅᴇ</button>
-    <div id="output"></div>
+
+    <input type="text" id="phoneInput" placeholder="e.g 2567XXXXXXX" maxlength="15" />
+
+    <button id="pairBtn" onclick="botPair()">🎲ɢᴇɴᴇʀᴀᴛᴇ ᴄᴏᴅᴇ</button>
+
+    <div id="output">—</div>
+
+    <!-- How to use steps -->
+    <div class="steps">
+        <p><span>①</span> Enter your number with country code</p>
+        <p><span>②</span> Tap Generate Code &amp; wait</p>
+        <p><span>③</span> Open WhatsApp → <strong>Linked Devices</strong></p>
+        <p><span>④</span> Tap <strong>Link with phone number</strong></p>
+        <p><span>⑤</span> Enter the code — Akaza connects! 🔥</p>
+    </div>
 </div>
 
-<div id="copyright">
-    &copy; 2026 Dante Dev
-</div>
+<div class="footer">ᴀᴋᴀᴢᴀ-ᴍᴅ © 2025</div>
+
+<script>
+async function botPair() {
+    const phone = document.getElementById('phoneInput').value.trim()
+    const output = document.getElementById('output')
+    const btn = document.getElementById('pairBtn')
+
+    // Validate input
+    if (!phone) {
+        output.className = 'error'
+        output.innerHTML = '⚠️ Please enter your number!'
+        return
+    }
+
+    const digits = phone.replace(/[^0-9]/g, '')
+    if (digits.length < 10 || digits.length > 15) {
+        output.className = 'error'
+        output.innerHTML = '⚠️ Invalid number format!'
+        return
+    }
+
+    // Loading state
+    btn.disabled = true
+    btn.innerHTML = 'requesting...'
+    output.className = ''
+    output.innerHTML = '<span class="spinner"></span> requesting ᴀᴋᴀᴢᴀ❄️ code....'
+
+    try {
+        const res = await fetch('/pair', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: digits })
+        })
+
+        const data = await res.json()
+
+        if (data.success) {
+            output.className = 'success'
+            output.innerHTML = `
+                🔑 <span id="codeText">${data.code}</span>
+                <button class="copy-btn" onclick="copyCode()">Copy</button>
+            `
+        } else {
+            output.className = 'error'
+            output.innerHTML = '❌ ' + (data.message || 'Failed. Try again.')
+        }
+
+    } catch (err) {
+        output.className = 'error'
+        output.innerHTML = '❌ Cannot reach Akaza server. Is the bot running?'
+    } finally {
+        btn.disabled = false
+        btn.innerHTML = '🎲ɢᴇɴᴇʀᴀᴛᴇ ᴄᴏᴅᴇ'
+    }
+}
+
+function copyCode() {
+    const code = document.getElementById('codeText')?.textContent
+    if (!code) return
+    navigator.clipboard.writeText(code).then(() => {
+        const btn = document.querySelector('.copy-btn')
+        if (btn) {
+            btn.textContent = '✅ Copied!'
+            setTimeout(() => btn.textContent = 'Copy', 2000)
+        }
+    })
+}
+
+// Allow Enter key to trigger pair
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('phoneInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') botPair()
+    })
+})
+</script>
 
 </body>
-  </html>
+</html>
