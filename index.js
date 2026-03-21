@@ -238,4 +238,3 @@ startAkaza().catch((err) => {
   log.error(`Fatal error: ${err.message}`)
   process.exit(1)
 })
-      
