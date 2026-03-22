@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AKAZA-MD | Pairing Code</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #07181f;
+      background-image: url("https://files.catbox.moe/qzm8n5.jpg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(7,26,47,0.75);
+      backdrop-filter: blur(2px);
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 400px;
+      padding: 16px;
+    }
+
+    .card {
+      background: rgba(7, 26, 47, 0.85);
+      border: 1px solid rgba(0,255,204,0.2);
+      border-radius: 18px;
+      padding: 32px 28px;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 0 40px rgba(0,255,204,0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00ffc3, #3a86ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .instruction {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 18px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,255,204,0.25);
+      border-radius: 12px;
+      padding: 6px;
+      overflow: hidden;
+    }
+
+    .input-row input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 10px 12px;
+    }
+
+    .input-row input::placeholder { color: rgba(255,255,255,0.25); }
+
+    .input-row button {
+      background: linear-gradient(135deg, #00ffc3, #3a86ff);
+      border: none;
+      border-radius: 8px;
+      color: #07181f;
+      font-weight: 900;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      padding: 10px 18px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .input-row button:hover { opacity: 0.85; transform: scale(0.97); }
+
+    #status {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      min-height: 28px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    #code-display {
+      margin-top: 10px;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #00ffc3;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      word-break: break-all;
+    }
+
+    #code-display:hover { opacity: 0.75; }
+
+    .copy-hint {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.25);
+      margin-top: 4px;
+    }
+
+    .glow-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 0 8px #00ffc3, 0 0 16px #3a86ff;
+      animation: glow 3s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 8px #00ffc3, 0 0 16px #00ffc3; }
+      to   { text-shadow: 0 0 8px #3a86ff, 0 0 20px #3a86ff; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="brand">❄️ AKAZA-MD</div>
+      <div class="subtitle">Pairing Code Generator</div>
+      <p class="instruction">⚙️ Enter your number with country code</p>
+
+      <div class="input-row">
+        <input type="number" id="number" placeholder="2348012345678">
+        <button id="submit">GET CODE</button>
+      </div>
+
+      <div id="status"></div>
+      <div id="code-display" onclick="copyCode()" title="Click to copy"></div>
+      <div class="copy-hint" id="copy-hint"></div>
+    </div>
+
+    <div class="glow-text">🔥 Powered by AKAZA-MD</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+  <script>
+    const statusEl = document.getElementById('status');
+    const codeEl   = document.getElementById('code-display');
+    const hintEl   = document.getElementById('copy-hint');
+    const numEl    = document.getElementById('number');
+    const btn      = document.getElementById('submit');
+
+    let currentCode = '';
+
+    function copyCode() {
+      if (!currentCode) return;
+      navigator.clipboard.writeText(currentCode).then(() => {
+        codeEl.style.color = '#3a86ff';
+        hintEl.textContent = '✅ Copied!';
+        setTimeout(() => {
+          codeEl.style.color = '#00ffc3';
+          hintEl.textContent = '👆 Click to copy';
+        }, 1500);
+      });
+    }
+
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      codeEl.textContent = '';
+      hintEl.textContent = '';
+      currentCode = '';
+
+      const val = numEl.value.trim();
+
+      if (!val) {
+        statusEl.innerHTML = '<span style="color:#ff4d4d">❗ Enter your WhatsApp number.</span>';
+        return;
+      }
+
+      const clean = val.replace(/[^0-9]/g, '');
+      if (clean.length < 10) {
+        statusEl.innerHTML = '<span style="color:#ff4d4d">❌ Invalid number — include country code.</span>';
+        return;
+      }
+
+      // Format display
+      numEl.type = 'text';
+      numEl.value = '+' + clean;
+      numEl.style.color = '#00ffc3';
+
+      statusEl.innerHTML = '⏳ Requesting pairing code...';
+      btn.disabled = true;
+
+      try {
+        const { data } = await axios(`/code?number=${clean}`);
+        currentCode = data.code || 'Service Unavailable';
+
+        if (data.code && data.code !== 'Service Unavailable') {
+          statusEl.innerHTML = '<span style="color:#00ffc3">✅ Your pairing code:</span>';
+          codeEl.textContent = data.code;
+          hintEl.textContent = '👆 Click to copy';
+        } else {
+          statusEl.innerHTML = '<span style="color:#ff4d4d">❗ ' + currentCode + '</span>';
+        }
+      } catch (err) {
+        statusEl.innerHTML = '<span style="color:#ff4d4d">❗ Failed to get code. Try again.</span>';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    numEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') btn.click();
+    });
+  </script>
+</body>
+</html>

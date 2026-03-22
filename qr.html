@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AKAZA-MD | QR Code</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; overflow: hidden; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(-45deg, #07181f, #0d2636, #051015, #0a2030);
+      background-size: 400% 400%;
+      animation: bgAnim 12s ease infinite;
+    }
+
+    @keyframes bgAnim {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      background: rgba(7,26,47,0.9);
+      border: 1px solid rgba(0,255,204,0.2);
+      border-radius: 20px;
+      padding: 28px 24px 22px;
+      width: 340px;
+      box-shadow: 0 0 60px rgba(0,255,204,0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00ffc3, #3a86ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      margin-bottom: 2px;
+    }
+
+    .subtitle {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .qr-wrapper {
+      width: 260px;
+      height: 260px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid rgba(0,255,204,0.25);
+      position: relative;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    /* scanning line animation */
+    .qr-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #00ffc3, transparent);
+      animation: scan 2.5s linear infinite;
+    }
+
+    @keyframes scan {
+      0%   { top: 0%; }
+      100% { top: 100%; }
+    }
+
+    .instruction {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    .instruction span {
+      color: #00ffc3;
+      font-weight: 700;
+    }
+
+    .progress-wrap {
+      width: 100%;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .progress-label {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.3);
+    }
+
+    progress {
+      width: 100%;
+      height: 4px;
+      border-radius: 4px;
+      appearance: none;
+      overflow: hidden;
+    }
+
+    progress::-webkit-progress-bar { background: rgba(255,255,255,0.05); border-radius: 4px; }
+    progress::-webkit-progress-value {
+      background: linear-gradient(90deg, #00ffc3, #3a86ff);
+      border-radius: 4px;
+    }
+
+    .reload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 10px 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,255,204,0.3);
+      border-radius: 10px;
+      color: #00ffc3;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      letter-spacing: 1px;
+    }
+
+    .reload-btn:hover {
+      background: rgba(0,255,204,0.08);
+      transform: translateY(-2px);
+    }
+
+    #expired-msg {
+      font-size: 0.85rem;
+      color: #ff4d4d;
+      margin-top: 8px;
+      display: none;
+    }
+  </style>
+
+  <script>
+    var timeLeft = 30;
+    var timer;
+    window.onload = function () {
+      timer = setInterval(function () {
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          document.getElementById('progressBar').remove();
+          document.getElementById('timerLabel').textContent = 'QR Expired';
+          document.getElementById('expired-msg').style.display = 'block';
+          return;
+        }
+        document.getElementById('progressBar').value = 30 - timeLeft;
+        timeLeft--;
+      }, 1000);
+    };
+  </script>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">❄️ AKAZA-MD</div>
+    <div class="subtitle">QR Code Pair</div>
+
+    <div class="qr-wrapper">
+      <img src="/server" alt="QR Code — Scan to connect">
+    </div>
+
+    <p class="instruction">
+      Open WhatsApp → <span>Linked Devices</span><br>
+      → Link a Device → Scan QR Code
+    </p>
+
+    <div class="progress-wrap">
+      <div class="progress-label" id="timerLabel">QR expires in 30s</div>
+      <progress value="0" max="30" id="progressBar"></progress>
+    </div>
+
+    <div id="expired-msg">⚠️ QR Expired — Please reload</div>
+
+    <a href="javascript:history.go(0)" class="reload-btn">🔄 Reload QR</a>
+  </div>
+</body>
+</html>
